@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+ 	<link rel="stylesheet" type="text/css" href="http://localhost:8020/style.css">
+ 	<title>profileview</title>
+ </head>
+ <body class="profilebody">
+ 	<script src="http://localhost:8020/client.js" type="text/javascript" ></script>
+ 	<div class="profilewrapper">
+ 		
+ 	
+	 	<div class="profileright">
+	 		<div class="profilewins">
+	 			<h3 id="winsnumber">0</h3>
+	 			<h3 id="winslabel">Wins</h3>
+	 		</div>
+	 		<div class="profilelosses">
+	 			<h3 id="lossesnumber">0</h3>
+	 			<h3 id="losseslabel">Losses</h3>
+	 		</div>
+	 		<div class="profilepoints">
+	 			<h3 id="pointsnumber">0</h3>
+	 			<h3 id="pointslabel">Points</h3>
+	 		</div>
+	 		<button  id="racebutton"  onclick="main.request_race()" 	type="button">Request A Race!!</button>
+
+
+	 	 
+	 		
+	 	</div>
+
+		<div class="profileleft">
+			<img id="profileviewimg" src="http://localhost:8020/test.jpg" alt="">
+			<h3 id="profileviewusername">Loading..</h3>
+			<img id="cartypeimg" src="http://localhost:8020/profilecar.png" alt="">
+			<h3 id="Typelabel">Car Type:</h3>
+			<img id="carmakeimg" src="http://localhost:8020/profilecar.png" alt="">
+			<h3 id="Makelabel">Car Make:</h3>
+			<img id="fastesttimeimg" src="http://localhost:8020/profilecar.png" alt="">
+			<h3 id="timelabel">Fastest Time:</h3>
+			<img id="locationimg" src="http://localhost:8020/profilecar.png" alt="">
+			<h3 id="locationlabel">Car Location:</h3>
+			<h3 id="membersince">Joined: Loading..</h3>
+			<h3 id="taunt"> You Fast Enough?!! ----------></h3>
+			<h3 id="type">Loading..</h3>
+			<h3 id="make">Loading..</h3>
+			<h3 id="time">Loading..</h3>
+			<h3 id="location">Loading..</h3>
+			
+
+
+		</div>
+	 </div>
+	 	
+
+
+
+ 		
+ 	</div>
+ 	<script>profile_manager.request_profile_data();</script>
+ 
+ </body>
+ </html> 

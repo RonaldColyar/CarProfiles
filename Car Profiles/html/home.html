@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<title>Street Racing Profiles</title>
+		<script src="http://localhost:8020/client.js" type="text/javascript" >	</script>
+		
+	
+	
+
+	</head>
+	<body class="homebody">
+		
+		
+		<div class="TopBar">
+			<ul>
+				<li onclick="window.scroll(0,700)">WHAT IS SRP?</li>
+				<li onclick="window.scroll(0,1600)">TOP CARS </li>
+				<li onclick="window.scroll(0,2600)">CONTACT</li>
+				<li onclick="redirect('http://localhost:8020/login')">SIGN IN</li>
+			</ul>
+			
+			<img src="civic.png" alt="">
+			<h5>SRP</h5>
+			<input id="profileinput" type="text" placeholder="Search Profiles...">
+			<button onclick="new Mainfunctionality().search_for_user('profileinput')" 
+			type="button">GO
+			</button>
+
+			<ul id="secondul">
+				<li onclick="redirect('https://github.com/RonaldColyar/Personal-Projects-Public/tree/master/Car%20Profiles')">SOURCE CODE</li>
+				<li>TWITTER</li>
+				<li onclick="redirect('http://localhost:8020/Profilehub')" >MY PROFILE</li>	
+			</ul>
+		</div>
+		<div class="center">
+			<img src="mainpic.jpg" alt="">
+			<h2>WELCOME TO STREET RACING PROFILES </h2>
+			<p>Street Racing Hub</p>
+
+			<button onclick="redirect('http://localhost:8020/signup')" type="button">JOIN US</button>
+		</div>
+		<div class="audi">
+			<img src="redaudi.jpg" alt="">
+
+		</div>
+		
+		<div class = "AboutHeader">
+
+			<h1>What is SRP?</h1>
+			<p>SRP is a platform for racers both on and off the street to race each other and gain points!!</p>
+			<h1>How does SRP work?</h1>
+			<p>Make a profile for your car or bike! , Pair with the person you would like to race , Race them and agree on who was victorius!!</p>
+			<p>Make sure you record the race!! If someone isn't truthful you can submit the footage as evidence!!</p>
+			<h1>How does the leaderboard work?</h1>
+			<p>When you win you gain points, but you only can race other users. No Outsiders!!</p>
+
+		</div>
+		<div class="Leaderboards">
+			<div class="header">
+				<h1>Street Kings!!</h1>
+				<img src="crownimage.png" alt="">
+
+				
+			</div>
+			
+			<div class="user">
+				<img class="image22" id="img1" src="test.jpg" alt="">
+				<h5>1</h5>
+				<h4 id="username1">username</h4>
+				
+				<h4 class="points" id="points1">0</h4>
+
+				
+			</div>
+			
+
+			<div class="user">
+
+				<img id="img2"  src="test.jpg" alt="">
+				<h5>2</h5>
+				<h4 id="username2">username</h4>
+				
+				<h4 class="points" id="points2">0</h4>
+
+				
+			</div>
+			
+			<div class="user">
+
+				<img id="img3" src="test.jpg" alt="">
+				<h5>3</h5>
+				<h4 id="username3">username</h4>
+				
+				<h4 class="points" id="points3">0</h4>
+			</div>
+			
+			<div class="user">
+				<img  id="img4"src="test.jpg" alt="">
+				<h5>4</h5>
+				<h4 id="username4">username</h4>
+				
+				<h4 class="points" id="points4">0</h4>
+			</div>
+			
+			<div class="user">
+				<img id="img5"  src="test.jpg" alt="">
+				<h5>5</h5>
+				<h4 id="username5">username</h4>
+				
+				<h4 class="points" id="points5">0</h4>
+			</div>
+
+
+
+			
+			
+		</div>
+		<div id="userview" >
+			<img id="userviewimg"  src="test.jpg">
+			<h3 id="userviewname">Username:ChicagoKiller</h3>
+			<h3 id="userviewlocation" class="whiteuserview" >Location: Chicago</h3>
+			<h3 id="userviewpointslabel" class="whiteuserview" >Points:</h3>
+			
+			<h3 id="userviewwinslabel"  class="whiteuserview" >Wins:</h3>
+			
+			<h3 id="userviewcartype" class="whiteuserview" >Car Type:Drag</h3>
+			<h3 id="userviewfastesttime" class="whiteuserview">Fastest Time:10.1</h3>
+			<h3 id="userviewwins">0</h3>
+			<h3 id="userviewpoints">1200</h3>
+			<button id="closeuserview" onclick="document.getElementById('userview').style.display='none'">
+				X
+			</button>
+			<button id="viewuserprofile">View Full Profile!</button>
+
+
+		</div>
+		<div id="ContactUs">
+		  <h3 id="contactuslabel">Contact Us!</h3>
+		  <div id="ContactUsFields">
+			<input id="contactemail" placeholder="Email...">
+			<input id="contactsubject" placeholder="Subject...">
+			<textarea id="contactdescription" placeholder="Description...">  </textarea>
+			<button onclick="main.send_contact_info()" id="submitcontact" type="button">Send</button>
+			<img id="ContactPaperimg" src="http://localhost:8020/images/paper.png">
+			<h3 id="ContactEmailimg">@</h3>
+			<h3 id="ContactSubjectimg">?</h3>
+		  </div>
+		</div>
+		
+
+	<script> leader_board_manager.fetch_leaderboard_data();</script>
+	 </body>
+	 
+</html>

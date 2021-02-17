@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+ <html>
+	 <head>
+	 	<link rel="stylesheet" type="text/css" href="style.css">
+	 	<title>Sign Up</title>
+	 </head>
+	 <body class="signupbody">
+	 	<script src="client.js" type="text/javascript" ></script>
+
+	 	<div class="wrapper">
+	 		
+	 	
+		 	<div class="mainsignup">
+
+		 		<input type="password" id="signuppassword" placeholder="Password" name="" value="">
+		 		<input id="signupusername" placeholder= "Username" type="text" name="">
+		 		<input id="cartypesignup" type="text" name="" placeholder="Car Type (ex :street ,track,drag)">
+		 		<input  id="carmakesignup" type="text" name="" placeholder="Make (ex : Honda ,chevy , ferrari">
+		 		<input id="fastesttimesignup" placeholder ="Fastest Time (ex: 10.5 in 1/4 mile)" type="text" name="">
+		 		<input id="locationsignup" placeholder="Location of car" type="text" name="">
+		 		<button id="signupbutton" onclick="creation_handler.sign_up()"   type="button">Sign up</button>
+		 		<h1 id="signuplabel">Sign up</h1>	 
+		 		
+  				<button id="Image" onclick="document.getElementById('getFile').click()">Choose Your Profile Image</button>
+				<input type='file' id="getFile" style="display:none" onchange="creation_handler.convert_file(this.files[0])"> 
+					
+		 	 
+		 		
+		 	</div>
+
+			<div class="leftsignup">
+	 			<h1 id="headersignup">Race and gain your stripes</h1>	
+	 			<img id="civic" src="signinimage.png" alt="">
+	 			<img id="crown" src="crownimage.png" alt="">
+	 			<p id="tauntsignup">Community of racers who compete to gain points and climb the leaderboards on and off the track! You fast enough?</p>
+				
+			</div>
+		 </div>
+		 	
+
+
+
+	 		
+		 </div>
+		 <button id="gohomesignup" onclick="redirect('http://localhost:8020/')">Go Home</button>
+	 
+	 </body>
+ </html> 
