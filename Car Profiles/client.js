@@ -1,4 +1,32 @@
 
+/**
+ * Main Functionality controls:
+ * 
+ * Sole Connector to the server.
+ * 	 Websocker Connectivity
+ *   Get Request Handler
+ * 
+ *  (User Hub):
+ *    1.The User Hub's Functionality(changing view states).
+ * 	  2.Setting the events of the User Hub's widgets(click).
+ * 	  3.Requesting The data for the User Hub.
+ * 	  4.CRUD of the race data.
+ * 	  5.Real Time Client-Server Communication with race status updates.
+ * 	  
+ *  (Home):
+ * 	  1.User Search Functionality
+ * 	  2.Sending Contact Information
+ * 	  3.Real Time Updates with server status
+ * 
+ * 
+ * 
+ */
+
+
+
+
+
+
 
 function redirect(url){
 	window.location.replace(url)
@@ -23,29 +51,6 @@ class SignUpUserData {
 			this.location  =  document.getElementById("locationsignup").value
 		}
 }
-
-/**
- * Main Functionality controls:
- * 
- * Sole Connector to the server.
- * 	 Websocker Connectivity
- *   Get Request Handler
- * 
- *  (User Hub):
- *    1.The User Hub's Functionality(changing view states).
- * 	  2.Setting the events of the User Hub's widgets(click).
- * 	  3.Requesting The data for the User Hub.
- * 	  4.CRUD of the race data.
- * 	  5.Real Time Client-Server Communication with race status updates.
- * 	  
- *  (Home):
- * 	  1.User Search Functionality
- * 	  2.Sending Contact Information
- * 	  3.Real Time Updates with server status
- * 
- * 
- * 
- */
 
 
 class Mainfunctionality{
