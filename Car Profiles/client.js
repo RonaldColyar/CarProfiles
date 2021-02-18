@@ -49,7 +49,7 @@ class SignUpUserData {
 
 
 class Mainfunctionality{
-	self = this;
+	
 	constructor(){
 		this.socket = new WebSocket('ws://localhost:8080');
 		this.uploaded_image = null;
@@ -72,7 +72,7 @@ class Mainfunctionality{
 		<h3 id ="pendingmessage">Race is Pending</h3>
 		<h3 class="racenames1">${data.name}</h3>
 	  </div>`;
-		self.add_raceview( html,num);
+		this.add_raceview( html,num);
 	}
 
 	add_pending_race(data,num){
@@ -82,8 +82,8 @@ class Mainfunctionality{
 		<button id="race${num}" class="racebuttons" type="button">Won</button>
 		<button  id="reject${num}"class="rejectbuttons" type="button">Loss</button>	
 	</div>`;
-	self.add_raceview(html,num);
-	self.add_pending_events(num,data);
+	this.add_raceview(html,num);
+	this.add_pending_events(num,data);
 	}
 	add_neutral_race(data,num){
 		const html = `<div  class="race">
@@ -92,8 +92,8 @@ class Mainfunctionality{
 						<button id="race${num}"  class="racebuttons" type="button">Accept</button>
 						<button id="reject${num}"  class="rejectbuttons" type="button">Reject</button>	
 								  </div>`
-				self.add_raceview(html,num);
-				self.add_neutral_events(data,num);
+				this.add_raceview(html,num);
+				this.add_neutral_events(data,num);
 
 	}
 	add_finished_race(data,num,claim){
@@ -108,7 +108,7 @@ class Mainfunctionality{
 		<button onclick = "document.getElementById('reportmod').style.display ='block'"  class="reportbutton">Report</button>
 					</div>`;
 					console.log(data)
-		self.add_raceview(html,num);
+		this.add_raceview(html,num);
 
 	}
 
@@ -116,33 +116,33 @@ class Mainfunctionality{
 	
 		//accept race
 		document.getElementById("race"+num)
-		.addEventListener("click",()=>{self.accept_race(num,data.name)})	
+		.addEventListener("click",()=>{this.accept_race(num,data.name)})	
 		//delete race
 		document.getElementById("reject"+num)
-		.addEventListener("click" ,()=>{self.delete_race(num,data.name)})
+		.addEventListener("click" ,()=>{this.delete_race(num,data.name)})
 }
 	add_pending_events(num,data){
 		//set new events
 		document.getElementById("reject"+ num).addEventListener("click" , ()=>{
-			self.declaration(data.name,"loss",num);
+			this.declaration(data.name,"loss",num);
 		});
 		document.getElementById("race"+num).addEventListener("click", ()=>{
-			self.declaration(data.name,"won",num);
+			this.declaration(data.name,"won",num);
 		});
 	}
 	update_raceview(data,status,num) {
 		
 		if(status == "domestic"){
-		  self.add_domestic_race(data,num)
+		  this.add_domestic_race(data,num)
 		}
 		else if (status == "pending"){ 
-		  self.add_pending_race(data,num)
+		  this.add_pending_race(data,num)
 		}
 		else if(status == "won" || status == "loss"){
-			self.add_finished_race(data,num,status)
+			this.add_finished_race(data,num,status)
 		}
 		else if(status == "foreign"){
-		  self.add_neutral_race(data,num)
+		  this.add_neutral_race(data,num)
 									}
 	}
 	async add_races(data){
@@ -150,7 +150,7 @@ class Mainfunctionality{
 		var races = data.races;
 		if (races!= null){
 			const keys = Object.keys(races);
-			for (i = 0 ; i<= keys.length -1 ; i++){
+			for (var i = 0 ; i<= keys.length -1 ; i++){
 				const racer = keys[i]; //opponent name
 				const race_status = races[racer].status;
 				const num = i+1 //because iteration starts at 0
@@ -165,20 +165,20 @@ class Mainfunctionality{
 	//when a user claim to win or lose
 	morph_state_finalize(
 		claim,other_claim,report_claim,
-		num,otherstate,selfstate,user2){
+		num,otherstate,thisstate,user2){
 			//modify created elements
 			claim.classList.add("claims");
 			other_claim.classList.add("claims2");
-			claim.innerText ="Your Claim:" +selfstate;
+			claim.innerText ="Your Claim:" +thisstate;
 			other_claim.innerText =user2+"'s :"+ otherstate;
 			report_claim.classList.add("reportbutton");
 			report_claim.innerText = "Report";
 			report_claim.id = "report"+num
-			self.add_elements_for_morph(claim , other_claim,report_claim,num);
+			this.add_elements_for_morph(claim , other_claim,report_claim,num);
 				}
 
 
-	morph_state(num,otherstate,selfstate,user2){
+	morph_state(num,otherstate,thisstate,user2){
 		//delete old elements
 		console.log("morph num:" + num)
 		document.getElementById("race" +num).remove();
@@ -187,13 +187,13 @@ class Mainfunctionality{
 		var claim = document.createElement("H3");
 		var other_claim = document.createElement("H3");
 		var report_claim = document.createElement("BUTTON")
-		self.morph_state_finalize(
+		this.morph_state_finalize(
 			claim, other_claim,report_claim,
-			num,otherstate,selfstate,user2
+			num,otherstate,thisstate,user2
 								)
 	}
 	add_elements_for_morph(claim , other_claim,report_claim,num){
-		report_claim.addEventListener("click" , self.display_report_form )
+		report_claim.addEventListener("click" , this.display_report_form )
 		var race = document.getElementById("div"+num);
 		race.appendChild(claim);
 		race.appendChild(other_claim);
@@ -202,29 +202,30 @@ class Mainfunctionality{
 			document.getElementById("reportmod").style.display = "block";
 		})
 	}
-	update_main_hub(data){
+	update_main_hub(data ,self){
 		document.getElementById("profilehubimg").src = data.image
 		document.getElementById("hubpoints").innerText = data.points
 		document.getElementById("hublosses").innerText = data.losses
 		document.getElementById("hubwins").innerText = data.wins
 		document.getElementById("hubusername").innerText = data.username
-		this.add_races(data);
-		self.socket.removeEventListener("message",self.check_hub_message);	
+		self.add_races(data);
+		self.socket.removeEventListener("message",this.check_hub_message);	
 	}
-	check_hub_message(message){
+	check_hub_message(message,self){
 		var data = JSON.parse(message.data);
 		console.log(data)
 		if (data.status == "HAUTHED") {
-			self.update_main_hub(data)
+			this.update_main_hub(data,self)
 			}
 		else{
 			redirect("http://localhost:8020/404")
 			}
 	}
 	request_and_check_hub_response(name){
+		var self = this;
 		var request = {type : "hub_request" , username:name};
-		self.socket.addEventListener("message" ,self.check_hub_message)
-		self.socket.send(JSON.stringify(request));
+		this.socket.addEventListener("message" ,(message)=>{this.check_hub_message(message,self)})
+		this.socket.send(JSON.stringify(request));
 	}
 	hub_information_request(){
 		this.socket.addEventListener("open" ,()=>{
@@ -234,7 +235,7 @@ class Mainfunctionality{
 				redirect("http://localhost:8020/404");
 			}
 			else{
-				self.request_and_check_hub_response(username );
+				this.request_and_check_hub_response(username );
 			}
 			})
 	}
@@ -271,7 +272,7 @@ class Mainfunctionality{
 			new_lost.innerText = "Loss";
 			old_accept.parentNode.replaceChild(new_won,old_accept);
 			old_reject.parentNode.replaceChild(new_lost,old_reject);
-			self.add_pending_events(num,{name:user});
+			this.add_pending_events(num,{name:user});
 
 			
 
@@ -279,14 +280,14 @@ class Mainfunctionality{
 		}
 
 		update_race(idnum, user){
-			self.clone_buttons(idnum,user)
+			this.clone_buttons(idnum,user)
 
 			
 		}
 		check_accept_message(num,message,name){		
 			console.log(message)
 			if(message.data  == "Success"){
-				self.update_race(num,name)
+				this.update_race(num,name)
 			}
 			else if(message.data == "issue_accepting"){
 				alert("Can't Accept Race at this time")
@@ -294,27 +295,27 @@ class Mainfunctionality{
 
 			}
 		accept_race(num,name){
-			if (self.socket.readyState == WebSocket.OPEN ) {
+			if (this.socket.readyState == WebSocket.OPEN ) {
 				var user1 = localStorage.getItem("srpusername");
 				var request = {type:"Accept_Race" , user1:user1, user2: name }
-				self.socket.send(JSON.stringify(request));
-				self.socket.addEventListener("message" ,
-					function(message){self.check_accept_message(num,message,name)})
+				this.socket.send(JSON.stringify(request));
+				this.socket.addEventListener("message" ,
+					(message)=>{this.check_accept_message(num,message,name)})
 			}
 		}
 		delete_race(){
-			const num = self.temp_num;
-			const user2 = self.temp_username;
-			if (self.socket.readyState == WebSocket.OPEN ) {
+			const num = this.temp_num;
+			const user2 = this.temp_username;
+			if (this.socket.readyState == WebSocket.OPEN ) {
 				const user1 = localStorage.getItem("srpusername");
 				const request = {type:"remove_race" , user1 :user1 , user2:user2};
-				self.socket.addEventListener("message" , (message)=>{
+				this.socket.addEventListener("message" , (message)=>{
 					if(message.data =="deleted_race"){
-						self.delete_race_view(num);
+						this.delete_race_view(num);
 	
 					}
 				})
-				self.socket.send(JSON.stringify(request))
+				this.socket.send(JSON.stringify(request))
 			}
 		}
 		check_declaration_response(message ,num,status,user2){
@@ -325,13 +326,13 @@ class Mainfunctionality{
 				" has come to an agreement! Thank you for your honesty..")
 			}
 			else if (message.data == "WAITING"){ 
-				self.morph_state(num , "pending",status,user2)
+				this.morph_state(num , "pending",status,user2)
 			}
 			else if (message.data == "NOT_HONEST"){
 				// if there is a disagreement
 				//if both people have the same claim
 				//both won or both loss
-				self.morph_state(num,status,status,user2)
+				this.morph_state(num,status,status,user2)
 			}
 		}
 		declaration(user2 , status,num){
@@ -339,7 +340,7 @@ class Mainfunctionality{
 				const user1 = localStorage.getItem("srpusername");
 				const request = {type:"Declaring" , user1 :user1 , user2:user2 , status: status};
 				this.socket.addEventListener("message",(message)=>{
-					self.check_declaration_response(message,num,status,user2);
+					this.check_declaration_response(message,num,status,user2);
 				})
 				this.socket.send(JSON.stringify(request));
 			}
@@ -361,18 +362,18 @@ class Mainfunctionality{
 			var url = "http://localhost:8020/userprofile/" +username+ "/data"
 			var response = await fetch(url);
 			var data = await response.json();
-			self.hub_search_check(data,username);
+			this.hub_search_check(data,username);
 		}
 		else{
 			alert("Search is Empty, Please Enter a name!")
 		}
 	}
 	set_hub_search_functionality(){
-		this.socket.removeEventListener("message" , self.check_hub_message)
+		this.socket.removeEventListener("message" , this.check_hub_message)
 		document.getElementById("hubsearchinput").addEventListener("keypress", (event)=>{
 			if(event.key == "Enter"){
 				console.log(event.key)
-				self.hub_search()
+				this.hub_search()
 			}
 		})
 	}
@@ -480,7 +481,7 @@ login_auth_check(message,username){
 
 class ProfileUpdater{
 
-	self = this;
+	this = this;
 	constructor(main){
 		this.main = main;
 
@@ -489,9 +490,9 @@ class ProfileUpdater{
 		console.log(hubdata)
 		if (hubdata.image) {
 				console.log(hubdata)
-				self.update_number_stats(hubdata);
-				self.update_car_stats(hubdata);
-				self.update_header_information(hubdata);
+				this.update_number_stats(hubdata);
+				this.update_car_stats(hubdata);
+				this.update_header_information(hubdata);
 				//for requesting races
 				this.main.current_page_user = hubdata.name;
 					}
@@ -580,7 +581,7 @@ class LeaderBoardHandler{
 	}
 }
 class  UserCreationHandler{
-		self = this;
+		
 		constructor(main){
 			this.main = main;
 		}
@@ -629,9 +630,10 @@ class  UserCreationHandler{
 	}
 	convert_file(file ){
 		//converts image to base 64
+		var self = this
 		 var converter = new FileReader();
 	  	 converter.readAsDataURL(file);
-	  	 formatted_image = converter.result;
+	  
 
 	     converter.onloadend = function () {
 	    	self.uploaded_image = converter.result;
@@ -666,7 +668,7 @@ class NewsHandler{
 		const image = this.creation_handler.uploaded_image;
 		if(image){
 			this.main.socket.addEventListener("message" ,(message)=>{
-				self.check_message(message,main.socket)});
+				this.check_message(message,main.socket)});
 			this.main.socket.send(JSON.stringify({
 				type:"NEWS_PUBLISH_REQUEST",
 				image:image,
@@ -687,7 +689,7 @@ class NewsHandler{
 		console.log(stories)
 		const newsview = document.getElementById("newsview");
 		
-		for(i=0; i<= stories.length-1; i++){
+		for(var i=0; i<= stories.length-1; i++){
 			const data = stories[i];
 			var parent = document.createElement("div");
 			parent.id = "story" + i;

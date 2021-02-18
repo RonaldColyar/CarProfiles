@@ -12,7 +12,7 @@
 
 
 class DatabaseInterface{
-    self = this;
+    
   constructor(){
       this.uri = "mongodb://localhost:27017/";
       this.mongo = require("mongodb").MongoClient;
@@ -33,11 +33,11 @@ class DatabaseInterface{
   connect() {
     this.mongo.connect(this.uri , (error,client)=> {
       if(error){
-        self.connection_error_status = true;
+        this.connection_error_status = true;
       }
       else{
-      self.db  =  client.db("authinfo");
-      self.collection = self.db.collection("users");
+      this.db  =  client.db("authinfo");
+      this.collection = this.db.collection("users");
       }
     });
   }
@@ -51,29 +51,30 @@ class DatabaseInterface{
 
 
   creation_finalize(data_obj,socket){
-    self.collection.insertOne(data_obj,function(error,result){
+    
+    this.collection.insertOne(data_obj,(error,result)=>{
         if (error) {
           socket.send("failed_creation");
                }
         else {
-          self.user_creation_cleanup(socket,  data_obj.user)
+          this.user_creation_cleanup(socket,  data_obj.user)
                 }
                         });
   }
 
   create_new_user(socket ,data_obj ){
-      if (self.connection_error_status == true) {
+      if (this.connection_error_status == true) {
         socket.send("failed_creation_connection");
       }
       else{
-        self.creation_finalize(data_obj, socket)
+        this.creation_finalize(data_obj, socket)
      
       }
 
     
   }
   delete_user(socket,username){
-    self.collection.deleteOne({user:username} ,(error,result)=>{
+    this.collection.deleteOne({user:username} ,(error,result)=>{
       if(error){
         socket.send("FAILED_DELETE_USER");
       }
@@ -101,16 +102,16 @@ class DatabaseInterface{
   }
 
   send_user_hub_data(username , socket){
-      if (self.connection_error_status == true){
+      if (this.connection_error_status == true){
         socket.send({status:"HDENIED"})
       }
       else{
-        self.collection.findOne({user:username} , (error , result)=>{ 
+        this.collection.findOne({user:username} , (error , result)=>{ 
           if(error){
             socket.send({status:"HDENIED"});
           }
           else{
-            self.hub_data_finalize(socket,result);
+            this.hub_data_finalize(socket,result);
           }
  
 
@@ -123,14 +124,14 @@ class DatabaseInterface{
   // 2. user searching functionality
 
   send_top_five(response){
-    self.collection.find({}).project({image:1, user:1 , points:1 , _id:0}).sort({points:-1}).limit(5)
+    this.collection.find({}).project({image:1, user:1 , points:1 , _id:0}).sort({points:-1}).limit(5)
           .toArray((error,result)=>{
     response.json(result);
 
     }) 
   }
   send_requested_status(username,socket){
-    self.collection.findOne({user:username} , (error , result)=>{ 
+    this.collection.findOne({user:username} , (error , result)=>{ 
     if (error){
       socket.send("false")
     }
@@ -150,17 +151,17 @@ class DatabaseInterface{
   check_for_requested_user(username , socket){
     //used for home page searching
   
-      if (self.connection_error_status == true){
+      if (this.connection_error_status == true){
         socket.send("error");
     }
       else{
-        self.send_requested_status(username,socket)
+        this.send_requested_status(username,socket)
       }
     
 
   }
   user_exists(username, response){
-      self.collection.findOne({user:username} , (err , result)=>{ 
+      this.collection.findOne({user:username} , (err , result)=>{ 
       
         if (result == null) {
           response.json({status:"NOT_FOUND"})
@@ -193,8 +194,8 @@ class DatabaseInterface{
   create_second_race_finalize(ws,user1,user2){
     const status = "races." + user1 + ".status"
     const date = "races." + user1 + ".date"
-    self.collection.updateOne({user:user2},
-      {$set:{[status]:"foreign" , [date]: self.current_date() }} , 
+    this.collection.updateOne({user:user2},
+      {$set:{[status]:"foreign" , [date]: this.current_date() }} , 
       (error,result)=>{
           if (error) {
             console.log(error)
@@ -223,10 +224,10 @@ class DatabaseInterface{
       //creating race for both users
         const parent = "races." + data.user2+ ".status"
         const date = "races." + data.user2 + ".date"
-        self.collection.updateOne({user:data.user1},
-          {$set:{[parent]:"domestic", [date]: self.current_date() }}, 
+        this.collection.updateOne({user:data.user1},
+          {$set:{[parent]:"domestic", [date]: this.current_date() }}, 
           (error ,result)=>{
-                self.create_second_user_race(error,ws,data.user1,data.user2)
+                this.create_second_user_race(error,ws,data.user1,data.user2)
       });
     
 
@@ -235,16 +236,16 @@ class DatabaseInterface{
 
   compare_race_statuses(user1,user2,status1,status2,socket){
     if(status1 == "won" && status2 == "loss"){
-      self.grant_win_and_points(user1);
+      this.grant_win_and_points(user1);
       socket.send("WIN_ACCEPTED");
-      self.delete_both_races(user1,user2);
-      self.grant_loss(user2);
+      this.delete_both_races(user1,user2);
+      this.grant_loss(user2);
     }
     else if (status1 == "loss" && status2 == "won"){
-      self.grant_win_and_points(user2);
+      this.grant_win_and_points(user2);
       socket.send("LOSS_ACCEPTED");
-      self.delete_both_races(user1,user2);
-      self.grant_loss(user1);
+      this.delete_both_races(user1,user2);
+      this.grant_loss(user1);
     }
     //both parties say they either won or loss
     else if ( status1 == status2){
@@ -260,7 +261,7 @@ class DatabaseInterface{
   }
 
   check_race_other_status(user1,user2,socket,user1_status){
-    self.collection.findOne({user:user2} , 
+    this.collection.findOne({user:user2} , 
       (error,result)=>{
         if(error){
           socket.send("error")
@@ -269,7 +270,7 @@ class DatabaseInterface{
         else{
           try{
           const user2_status = result.races[user1].status;
-          self.compare_race_statuses(user1,user2,user1_status, user2_status,socket);
+          this.compare_race_statuses(user1,user2,user1_status, user2_status,socket);
           }
           catch(e){
             console.log(e)
@@ -283,20 +284,20 @@ class DatabaseInterface{
 
   update_race_status(user1 , user2,socket,status){
     const path = "races." + user2 +".status"
-    self.collection.updateOne({user:user1}, {$set:{[path]:status}} 
+    this.collection.updateOne({user:user1}, {$set:{[path]:status}} 
       , (error,result)=>{
         if(error){
           socket.send("error")
         }
         else{
-          self.check_race_other_status(user1,user2,socket,status)
+          this.check_race_other_status(user1,user2,socket,status)
         }
       })
     
   }
   delete_race_for_user2 = (user1,user2)=>{ 
     const path_to_unset = "races."+user1
-    self.collection.updateOne({user:user2} ,{$unset:{[path_to_unset]:""}}, 
+    this.collection.updateOne({user:user2} ,{$unset:{[path_to_unset]:""}}, 
       (error,result)=>{
           if(error){
             console.log("error")
@@ -312,13 +313,13 @@ class DatabaseInterface{
   delete_both_races(user1,user2) {
     console.log(user1+","+user2)
     const path_to_unset = "races."+user2
-    self.collection.updateOne({user:user1} ,{$unset:{[path_to_unset]:""}} 
-      ,function(error,result){
+    this.collection.updateOne({user:user1} ,{$unset:{[path_to_unset]:""}} 
+      ,(error,result)=>{
           if (error){
             console.console.log("error deleting race for user:" + user1);
           }
           else{
-            self.delete_race_for_user2(user1,user2);
+            this.delete_race_for_user2(user1,user2);
 
           }
 
@@ -330,7 +331,7 @@ class DatabaseInterface{
 
   confirm_second_race(user1,user2,socket){
     const status = "races." + user1 + ".status"
-    self.collection.updateOne({user:user2} , {$set:{[status]:"pending"}} ,
+    this.collection.updateOne({user:user2} , {$set:{[status]:"pending"}} ,
       (error,result)=>{
         if(error){
           socket.send("issue_accepting");
@@ -343,13 +344,13 @@ class DatabaseInterface{
   } 
   confirm_race(user1,user2,socket){
     const status = "races." + user2 + ".status"
-    self.collection.updateOne({user:user1} ,{$set:{[status]:"pending"}} , 
+    this.collection.updateOne({user:user1} ,{$set:{[status]:"pending"}} , 
       (error , result)=>{
         if(error){
           socket.send("issue_accepting");
         }
         else{
-          self.confirm_second_race(user1,user2,socket)
+          this.confirm_second_race(user1,user2,socket)
         }
       });
     
@@ -361,7 +362,7 @@ class DatabaseInterface{
     console.log("result:"+ result)
     var new_wins = result.wins + 1 
     var new_points = result.points + 200
-    self.collection.updateOne({user:username} , {$set : {wins:new_wins ,points:new_points },
+    this.collection.updateOne({user:username} , {$set : {wins:new_wins ,points:new_points },
     function (error,result) {
         if(error){
          console.log("Error Giving Win to :"+ username )
@@ -375,17 +376,17 @@ class DatabaseInterface{
 
   }
   async grant_win_and_points (username){
-        if(self.connection_error_status == true){
+        if(this.connection_error_status == true){
           console.log("222.error connecting to mongo db to give")
           console.log("222.trying to give win to: "+username)
         }
         else{
-         var result = await self.collection.findOne({user:username},{_id : 0 , wins:1, points:1})
+         var result = await this.collection.findOne({user:username},{_id : 0 , wins:1, points:1})
          if(result == null){
            console.log("Error Giving Win to :"+ username )
          }
          else{
-         self.grant_win_and_points_finalize(result,username);
+         this.grant_win_and_points_finalize(result,username);
 
           }
             
@@ -393,10 +394,10 @@ class DatabaseInterface{
     }
 
     async grant_loss(username){
-      var data = await self.collection.findOne({user:username}, {_id:0 , losses:1})
+      var data = await this.collection.findOne({user:username}, {_id:0 , losses:1})
       var new_losses = data.losses +1
       //update new value
-      self.collection.updateOne({user:username} , {$set:{losses:new_losses}},
+      this.collection.updateOne({user:username} , {$set:{losses:new_losses}},
         function(error,result){
           if(error){
             console.log("issue giving loss to:" + username)
@@ -411,7 +412,7 @@ class  AuthManager{
         this.DatabaseManager = DatabaseManager
         
       }
-      self = this;
+      this = this;
       compare_passwords(pass,sessions_obj,socket,result,username){
         if (result.pass == pass){
           const address = socket._socket.remoteAddress ; // ip 
@@ -424,13 +425,13 @@ class  AuthManager{
     }
 
     login_finalize(username, pass,socket,sessions_obj){
-      this.DatabaseManager.collection.findOne({user:username} , function(err , result){ 
+      this.DatabaseManager.collection.findOne({user:username} ,(err , result)=>{ 
         //no user found
         if (result == null) {
           socket.send("user_not_found");
         }
         else{
-          self.compare_passwords(pass,sessions_obj,socket,result,username)
+          this.compare_passwords(pass,sessions_obj,socket,result,username)
         }
         
       })
@@ -452,7 +453,7 @@ login(username,pass,socket,sessions_obj){
       socket.send("user_not_found");
     }
     else{
-      self.login_finalize(username,pass,socket,sessions_obj,self.collection)
+      this.login_finalize(username,pass,socket,sessions_obj,this.collection)
 
   }
 }
@@ -464,7 +465,7 @@ login(username,pass,socket,sessions_obj){
 
 
 class MediaManager{
-  self = this;
+  this = this;
   constructor(DatabaseManager,db,collection){
     this.DatabaseManager = DatabaseManager;
     this.db = db;
@@ -474,11 +475,11 @@ class MediaManager{
   connect(){
     this.DatabaseManager.mongo.connect(DatabaseManager.uri ,(error,client)=> {
         if(error){
-          self.news_connection_error = true;
+          this.news_connection_error = true;
         }
         else{
-        self.db  =  client.db(this.db);
-        self.collection = self.db.collection(this.collection_setter);
+        this.db  =  client.db(this.db);
+        this.collection = this.db.collection(this.collection_setter);
         }
       });
 
@@ -493,17 +494,17 @@ class MediaManager{
   }
 
   add_post(data,socket,successmsg,errormsg){
-    if(self.news_connection_error != true){
+    if(this.news_connection_error != true){
 
-        self.collection.insertOne(data, (error,result)=>{
-          self.check_for_error(error,socket,successmsg,errormsg)
+        this.collection.insertOne(data, (error,result)=>{
+          this.check_for_error(error,socket,successmsg,errormsg)
         })
       
     }
   }
 
   send_recent_posts(response){  
-    self.collection.find({}).sort({date:-1}).limit(5)
+    this.collection.find({}).sort({date:-1}).limit(5)
   .toArray((error,result)=>{
         response.json(result);
     
@@ -514,9 +515,9 @@ class MediaManager{
 
 
   remove_all_news(socket){
-    if(self.news_connection_error != true){
-    self.collection.deleteMany({} , (error,result)=>{
-      self.check_for_error(error,socket)
+    if(this.news_connection_error != true){
+    this.collection.deleteMany({} , (error,result)=>{
+      this.check_for_error(error,socket)
     })
    }
   }
@@ -736,13 +737,14 @@ app.listen(8020);
   //websocket handling
 wss.on('connection', function(ws) {
       ws.on('message', function(message) {
-        console.log(message)
       	  //requests via websocket
           try{
+             
               var data =  JSON.parse(message);
-              Socket_Router.tier1_routing(data)
+              Socket_Router.tier1_routing(data,ws)
         }
         catch(e){
+          console.log(message)
           console.log('user at(' + ws._socket.remoteAddress + ") triggered an error")
           console.log(e)
         }
